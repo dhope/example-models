@@ -1,5 +1,5 @@
-library(INLA);
-library(spdep);
+# library(INLA);
+# library(spdep);
 
 
 # validateNb
@@ -105,7 +105,7 @@ nb2subgraph = function(x, c_id, comp_ids, offsets) {
     if (comp_ids[i] == c_id) {
       if (x[[i]][1] != 0) {
         for (j in 1:length(x[[i]])) {
-          n2 = unlist(x[[i]][j]);    
+          n2 = unlist(x[[i]][j]);
           if (i < n2) {
             idx = idx + 1;
             node1[idx] = offsets[i];
@@ -163,10 +163,10 @@ orderByComponent = function(x) {
 
   # generate new nb list
   new_nb = structure(vector("list", length=N),class="nb");
-  attr(new_nb, "region.id") = new_ids;  
+  attr(new_nb, "region.id") = new_ids;
   attr(new_nb, "type") = attributes(x)$type;
   attr(new_nb, "sym") = attributes(x)$sym;
-  attr(new_nb, "region.id") = new_ids;  
+  attr(new_nb, "region.id") = new_ids;
   for (i in 1:N) {
     idx_old = rMap[i];
     old_nbs = x[[idx_old]];
@@ -183,7 +183,7 @@ orderByComponent = function(x) {
     }
   }
   return(list(new_nb,rMap));
-}  
+}
 
 
 # reorderVector
@@ -194,7 +194,7 @@ orderByComponent = function(x) {
 #
 reorderVector = function(x, rMap) {
   if (!is.vector(x)) return(NULL);
-  N = length(x);              
+  N = length(x);
   result = vector("numeric", length=N);
   for (i in 1:N) {
     result[i]= x[rMap[i]];
@@ -240,14 +240,14 @@ scale_nb_components = function(x) {
     if (N_subregions > 1) {
       # get adj matrix for this component
       drops = comp_ids != i;
-      nb_tmp = droplinks(x, drops);      
+      nb_tmp = droplinks(x, drops);
       nb_graph = nb2subgraph(nb_tmp, i, comp_ids, offsets);
       adj.matrix = sparseMatrix( i=nb_graph$node1, j=nb_graph$node2, x=1, dims=c(N_subregions,N_subregions), symmetric=TRUE);
       # compute ICAR precision matrix
       Q =  Diagonal(N_subregions, rowSums(adj.matrix)) - adj.matrix;
       # Add a small jitter to the diagonal for numerical stability (optional but recommended)
       Q_pert = Q + Diagonal(N_subregions) * max(diag(Q)) * sqrt(.Machine$double.eps)
-      # Compute the diagonal elements of the covariance matrix subject to the 
+      # Compute the diagonal elements of the covariance matrix subject to the
       # constraint that the entries of the ICAR sum to zero.
       Q_inv = inla.qinv(Q_pert, constr=list(A = matrix(1,1,N_subregions),e=0))
       # Compute the geometric mean of the variances, which are on the diagonal of Q.inv
@@ -258,7 +258,7 @@ scale_nb_components = function(x) {
   return(scales);
 }
 
-library(INLA)
+# library(INLA)
 get_scaling_factor = function(nbs) {
   #Build the adjacency matrix
   adj.matrix = sparseMatrix(i=nbs$node1,j=nbs$node2,x=1,symmetric=TRUE)

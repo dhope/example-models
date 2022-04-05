@@ -11,7 +11,7 @@ set.seed(123)
 ## Read data
 ## The data file "burnet.txt" is available at
 ## http://www.vogelwarte.ch/de/projekte/publikationen/bpa/complete-code-and-data-files-of-the-book.html
-bdat <- read.table(file = "burnet.txt", header = T)
+bdat <- read.table(file = "BPA/data_code/burnet.txt", header = T)
 y <- array(NA, dim = c(95, 2, 7))   # 95 sites, 2 reps, 7 days
 for (i in 1:7) {
   sel.rows <- bdat$day == i
@@ -38,7 +38,7 @@ inits <- lapply(1:nc, function(i)
          p = runif(1, 0, 1)))
 
 ## Call Stan from R
-out2 <- stan("Dynocc2.stan",
+out2 <- stan("BPA/Ch.13/Dynocc2.stan",
              data = stan_data,
              init = inits, pars = params,
              chains = nc, iter = ni, warmup = nb, thin = nt,
